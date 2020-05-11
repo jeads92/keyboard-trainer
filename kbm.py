@@ -1,6 +1,7 @@
 import random
 import os
 from nltk.corpus import words
+import time
 
 class CharacterRunner():
     def __init__(self):
@@ -29,16 +30,22 @@ class CharacterRunner():
         
     def run_game(self, game_choice):
         '''
-        This used the predefined character sets to genereate the character the
+        This uses the predefined character sets to genereate the character the
         user must type in correctly. Combo is updated if correct or incorrect.
         '''
+        char_time = ''
         while self.user_selection != 'ENDGAME':
             os.system('cls')
             character = game_choice[random.randint(0,len(game_choice) - 1)]
             print(f'Current Streak: {self.combo}!\n')
+            if type(char_time) != str:
+                print(f'Input time: {char_time:0.4f}')
             print(self.answer_status)
-            print(f'Number is: {character} ')
+            print(f'Type: {character} ')
+            start_time = time.perf_counter()
             self.user_selection = input('Type the number: ')
+            end_time = time.perf_counter()
+            char_time = end_time - start_time
             if self.user_selection == 'ENDGAME':
                 print('Game Ended')
             elif self.user_selection == character:
@@ -69,6 +76,12 @@ class CharacterRunner():
             
             
     def build_a_string(self):
+        '''
+        This builds a randomly-generated string from all characters on the
+        keyboard. The user then must type the string correctly. They start at
+        the character, then move on to the first and second character, and keep
+        on moving up until they correctly type the full string.
+        '''
         progress = 0
         user_input = ''
         for number in range(10):
