@@ -54,27 +54,8 @@ class CharacterRunner():
             else:
                 self.combo = 0
                 self.answer_status = 'Wrong'
-        
-    def mainscreen(self):
-        '''
-        This lets the user choose which type of character set they want to
-        practice.
-        '''
-        print('What do you want to train?')
-        print('1.)Numbers\n2.)Letters\n3.)Symbols\n4.)Keypad\n5.) For words.\n')
-        game_type = input('Enter game choice ')
-        if game_type == '1':
-            self.run_game(self.numbers_var)
-        elif game_type == '2':
-            self.run_game(self.letter_var)
-        elif game_type == '3':
-            self.run_game(self.symbol_var)
-        elif game_type == '4':
-            self.run_game(self.keypad_var)
-        elif game_type == '5':
-            self.run_game(self.word_list)
-            
-            
+
+
     def build_a_string(self):
         '''
         This builds a randomly-generated string from all characters on the
@@ -87,24 +68,46 @@ class CharacterRunner():
         char_time = 0
         for number in range(10):
             self.rando_string += self.all_var[random.randint(0,len(self.all_var) - 1)]
-        print(self.rando_string)
-        while progress != len(self.rando_string) - 1 or user_input != 'ENDGAME':
+        while progress != len(self.rando_string) - 1:
             if progress < 0:
                 progress =0
             os.system('cls')
             print(f'Input time: {char_time:0.4f}.')
             print(f'The b.a.s. is {self.rando_string}.')
             print(f'your progress is {self.rando_string[:progress + 1]}' + '\n')
-            start_time = time.perf_counter
+            start_time = time.perf_counter()
             user_input = input('Enter your character: ')
-            end_time = time.perf_counter
+            end_time = time.perf_counter()
             char_time = end_time - start_time
             if user_input == self.rando_string[:progress + 1]:
                 progress += 1
             elif user_input == 'ENDGAME':
                 print('bye')
+                break
             else:
                 progress -= 1
+                
+                
+    def mainscreen(self):
+        '''
+        This lets the user choose which type of character set they want to
+        practice.
+        '''
+        print('What do you want to train?')
+        print('1.)Numbers\n2.)Letters\n3.)Symbols\n4.)Keypad\n5.)For words.\n6.)Build-a-String')
+        game_type = input('Enter game choice ')
+        if game_type == '1':
+            self.run_game(self.numbers_var)
+        elif game_type == '2':
+            self.run_game(self.letter_var)
+        elif game_type == '3':
+            self.run_game(self.symbol_var)
+        elif game_type == '4':
+            self.run_game(self.keypad_var)
+        elif game_type == '5':
+            self.run_game(self.word_list)
+        elif game_type == '6':
+            self.build_a_string()
         
     
 def start_game():
