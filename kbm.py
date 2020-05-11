@@ -12,9 +12,19 @@ class CharacterRunner():
                   '+', '=', '[', '{', ']', '}', ':', ';', "'", '|', '\\', ',',\
                       '<', '.', '>', '?', '/', '`', '~')
         self.word_list = words.words()
+        self.all_var = ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '/',\
+                        '*', '-', '+', '.', 'a', 'b', 'c', 'd', 'e', 'f','g',\
+                            'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',\
+                                'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'\
+                                    '!', '@', '#', '$', '%', '^', '&',\
+                                        '(', ')', '_', '=', '[',\
+                                            '{', ']', '}', ':', ';', "'",\
+                                                '|', '\\', ',', '<', '.',\
+                                                    '>', '?', '`', '~') 
         self.combo = 0
         self.user_selection = ''
         self.answer_status = 'Ready Up'
+        self.rando_string = ''
         
         
     def run_game(self, game_choice):
@@ -56,8 +66,29 @@ class CharacterRunner():
             self.run_game(self.keypad_var)
         elif game_type == '5':
             self.run_game(self.word_list)
-    
+            
+            
+    def build_a_string(self):
+        progress = 0
+        user_input = ''
+        for number in range(10):
+            self.rando_string += self.all_var[random.randint(0,len(self.all_var) - 1)]
+        print(self.rando_string)
+        while progress != len(self.rando_string) - 1 or user_input != 'ENDGAME':
+            if progress < 0:
+                progress =0
+            os.system('cls')
+            print(f'The b.a.s. is {self.rando_string}.')
+            print(f'your progress is {self.rando_string[:progress + 1]}' + '\n')
+            user_input = input('Enter your character: ')
+            if user_input == self.rando_string[:progress + 1]:
+                progress += 1
+            elif user_input == 'ENDGAME':
+                print('bye')
+            else:
+                progress -= 1
         
+    
 def start_game():
     start = CharacterRunner()
     start.mainscreen()
