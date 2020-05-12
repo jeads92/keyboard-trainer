@@ -2,6 +2,7 @@ import random
 import os
 from nltk.corpus import words
 import time
+import msvcrt
 
 
 class CharacterRunner():
@@ -35,7 +36,7 @@ class CharacterRunner():
         user must type in correctly. Combo is updated if correct or incorrect.
         '''
         char_time = ''
-        while self.user_selection != 'ENDGAME':
+        while self.user_selection != 'Q':
             os.system('cls')
             character = game_choice[random.randint(0, len(game_choice) - 1)]
             print(f'Current Streak: {self.combo}!\n')
@@ -43,11 +44,17 @@ class CharacterRunner():
                 print(f'Input time: {char_time:0.4f}')
             print(self.answer_status)
             print(f'Type: {character} ')
-            start_time = time.perf_counter()
-            self.user_selection = input('Type the number: ')
-            end_time = time.perf_counter()
+
+            if len(character) == 1:
+                start_time = time.perf_counter()
+                self.user_selection = msvcrt.getch().decode('utf-8')
+                end_time = time.perf_counter()
+            else:
+                start_time = time.perf_counter()
+                self.user_selection = input('Type the number: ')
+                end_time = time.perf_counter()
             char_time = end_time - start_time
-            if self.user_selection == 'ENDGAME':
+            if self.user_selection == 'Q':
                 print('Game Ended')
             elif self.user_selection == character:
                 self.combo += 1
