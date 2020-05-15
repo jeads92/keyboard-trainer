@@ -76,13 +76,13 @@ class CharacterRunner():
         for number in range(10):
             self.rando_string += (
                 self.all_var[random.randint(0, len(self.all_var) - 1)])
-        while progress != len(self.rando_string) - 1:
+        while progress != len(self.rando_string):
             if progress < 0:
                 progress = 0
             os.system('cls')
             print(f'Input time: {char_time:0.4f}.')
             print(f'The b.a.s. is {self.rando_string}.')
-            print(f'your progress is {self.rando_string[:progress + 1]}' +
+            print(f'Current string: {self.rando_string[:progress + 1]}' +
                   '\n')
             start_time = time.perf_counter()
             user_input = input('Enter your character: ')
