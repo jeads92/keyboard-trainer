@@ -3,6 +3,7 @@ import os
 from nltk.corpus import words
 import time
 import msvcrt
+import pickle
 
 
 class CharacterRunner():
@@ -29,6 +30,8 @@ class CharacterRunner():
         self.user_selection = ''
         self.answer_status = 'Ready Up'
         self.rando_string = ''
+        self.user = ''
+        self.character_data = {}
 
     def run_game(self, game_choice):
         '''
@@ -58,10 +61,14 @@ class CharacterRunner():
                 print('Game Ended')
             elif self.user_selection == character:
                 self.combo += 1
+                self.character_data[character]['correct'] += 1
                 self.answer_status = 'Correct!'
             else:
                 self.combo = 0
+                self.character_data[character]['incorrect'] += 1
                 self.answer_status = 'Wrong'
+        with open(r"C:\Users\MaxSteele\Documents\py_programs\keyboard-project\user-saves" + '\\' + self.user, 'wb') as f:
+            pickle.dump(self.character_data, f)
 
     def build_a_string(self):
         '''
@@ -95,15 +102,22 @@ class CharacterRunner():
                 break
             else:
                 progress -= 1
-
     def mainscreen(self):
         '''
-        This lets the user choose which type of character set they want to
-        practice.
+        This lets the user log into or create a profile. It also lets them
+        choose which type of character set they want to practice.
         '''
+        self.user = input('Enter your name!\n ')
+        for item in self.all_var:
+            self.character_data[item] = {'correct': 0, 'incorrect': 0}
+        with open(r"C:\Users\MaxSteele\Documents\py_programs\keyboard-project\user-saves" + '\\' + self.user, 'wb') as f:
+            pickle.dump(self.character_data, f)
+            
+            
         print('What do you want to train?')
         print(('1.)Numbers\n2.)Letters\n3.)Symbols\n4.)Keypad\n5.)For words.\
                \n6.)Build-a-String'))
+              
         game_type = input('Enter game choice ')
         if game_type == '1':
             self.run_game(self.numbers_var)
