@@ -4,7 +4,7 @@ from nltk.corpus import words
 import time
 import msvcrt
 import pickle
-
+#test email masking
 
 class CharacterRunner():
     def __init__(self):
@@ -32,6 +32,8 @@ class CharacterRunner():
         self.rando_string = ''
         self.user = ''
         self.character_data = {}
+        
+        self.user_list = []
 
     def run_game(self, game_choice):
         '''
@@ -102,6 +104,7 @@ class CharacterRunner():
                 break
             else:
                 progress -= 1
+
     def mainscreen(self):
         '''
         This lets the user log into or create a profile. It also lets them
