@@ -5,7 +5,7 @@ import time
 import msvcrt
 import pickle
 #test email masking
-
+#testing blocking of email pushes that expose primary email
 class CharacterRunner():
     def __init__(self):
         self.numbers_var = ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
