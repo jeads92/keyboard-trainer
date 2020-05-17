@@ -41,7 +41,6 @@ class CharacterRunner():
             self.user_list = []
             f = open(r"C:\Users\MaxSteele\Documents\py_programs\keyboard-project\list-of-users\user-list", 'w+')
             f.close()
-            
 
     def run_game(self, game_choice):
         '''
@@ -70,13 +69,15 @@ class CharacterRunner():
             if self.user_selection == 'Q':
                 print('Game Ended')
             elif self.user_selection == character:
-                self.combo += 1
-                self.character_data[character]['correct'] += 1
-                self.answer_status = 'Correct!'
+                if len(character) == 1:
+                    self.combo += 1
+                    self.character_data[character]['correct'] += 1
+                    self.answer_status = 'Correct!'
             else:
-                self.combo = 0
-                self.character_data[character]['incorrect'] += 1
-                self.answer_status = 'Wrong'
+                if len(character) == 1:
+                    self.combo = 0
+                    self.character_data[character]['incorrect'] += 1
+                    self.answer_status = 'Wrong'
         # This creates a user file and pickle dumps the contents into a file.
         with open(r"C:\Users\MaxSteele\Documents\py_programs\keyboard-project\user-saves" + '\\' + self.user, 'wb') as f:
             pickle.dump(self.character_data, f)
@@ -125,7 +126,7 @@ class CharacterRunner():
             with open(r"C:\Users\MaxSteele\Documents\py_programs\keyboard-project\user-saves" + '\\' + self.user, 'rb') as f:
                 self.character_data = pickle.load(f)
         else:
-            #initialized character data for a new user. All correct and
+            # initialized character data for a new user. All correct and
             # incorrect ticks are set to 0.
             self.user_list.append(self.user)
             # Update the Save file for the list of users
