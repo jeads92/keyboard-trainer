@@ -4,8 +4,8 @@ from nltk.corpus import words
 import time
 import msvcrt
 import pickle
-#test email masking
-#testing blocking of email pushes that expose primary email
+
+
 class CharacterRunner():
     def __init__(self):
         self.numbers_var = ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
@@ -32,8 +32,16 @@ class CharacterRunner():
         self.rando_string = ''
         self.user = ''
         self.character_data = {}
-        
-        self.user_list = []
+        # Attempts to load a save data of users. if one does not exist, an 
+        # empty one is created
+        try:
+            f = open(r"C:\Users\MaxSteele\Documents\py_programs\keyboard-project\list-of-users\user-list", 'rb')
+            self.user_list = pickle.load(f)
+        except FileNotFoundError:
+            self.user_list = []
+            f = open(r"C:\Users\MaxSteele\Documents\py_programs\keyboard-project\list-of-users\user-list", 'w+')
+            f.close()
+            
 
     def run_game(self, game_choice):
         '''
@@ -69,6 +77,7 @@ class CharacterRunner():
                 self.combo = 0
                 self.character_data[character]['incorrect'] += 1
                 self.answer_status = 'Wrong'
+        # This creates a user file and pickle dumps the contents into a file.
         with open(r"C:\Users\MaxSteele\Documents\py_programs\keyboard-project\user-saves" + '\\' + self.user, 'wb') as f:
             pickle.dump(self.character_data, f)
 
@@ -110,17 +119,27 @@ class CharacterRunner():
         This lets the user log into or create a profile. It also lets them
         choose which type of character set they want to practice.
         '''
+        print(f'Current users: {self.user_list}.')
         self.user = input('Enter your name!\n ')
-        for item in self.all_var:
-            self.character_data[item] = {'correct': 0, 'incorrect': 0}
-        with open(r"C:\Users\MaxSteele\Documents\py_programs\keyboard-project\user-saves" + '\\' + self.user, 'wb') as f:
-            pickle.dump(self.character_data, f)
-            
-            
+        if self.user in self.user_list:
+            with open(r"C:\Users\MaxSteele\Documents\py_programs\keyboard-project\user-saves" + '\\' + self.user, 'rb') as f:
+                self.character_data = pickle.load(f)
+        else:
+            #initialized character data for a new user. All correct and
+            # incorrect ticks are set to 0.
+            self.user_list.append(self.user)
+            # Update the Save file for the list of users
+            with open(r"C:\Users\MaxSteele\Documents\py_programs\keyboard-project\list-of-users\user-list", 'wb') as f:
+                pickle.dump(self.user_list, f)
+            for item in self.all_var:
+                self.character_data[item] = {'correct': 0, 'incorrect': 0}
+            # This dumps the user data into their file.
+            with open(r"C:\Users\MaxSteele\Documents\py_programs\keyboard-project\user-saves" + '\\' + self.user, 'wb') as f:
+                pickle.dump(self.character_data, f)
         print('What do you want to train?')
         print(('1.)Numbers\n2.)Letters\n3.)Symbols\n4.)Keypad\n5.)For words.\
                \n6.)Build-a-String'))
-              
+
         game_type = input('Enter game choice ')
         if game_type == '1':
             self.run_game(self.numbers_var)
