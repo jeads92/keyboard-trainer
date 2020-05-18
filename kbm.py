@@ -32,14 +32,16 @@ class CharacterRunner():
         self.rando_string = ''
         self.user = ''
         self.character_data = {}
-        # Attempts to load a save data of users. if one does not exist, an 
+        # Attempts to load a save data of users. if one does not exist, an
         # empty one is created
         try:
-            f = open(r"C:\Users\MaxSteele\Documents\py_programs\keyboard-project\list-of-users\user-list", 'rb')
+            f = open(r"C:\Users\MaxSteele\Documents\py_programs"
+                     r"\keyboard-project\list-of-users\user-list", 'rb')
             self.user_list = pickle.load(f)
         except FileNotFoundError:
             self.user_list = []
-            f = open(r"C:\Users\MaxSteele\Documents\py_programs\keyboard-project\list-of-users\user-list", 'w+')
+            f = open(r"C:\Users\MaxSteele\Documents\py_programs"
+                     r"\keyboard-project\list-of-users\user-list", 'w+')
             f.close()
 
     def run_game(self, game_choice):
@@ -73,13 +75,21 @@ class CharacterRunner():
                     self.combo += 1
                     self.character_data[character]['correct'] += 1
                     self.answer_status = 'Correct!'
+                    self.character_data[character]['total time'] += char_time
+                    self.character_data[character]['average time'] = (
+                        self.character_data[character]['total time']
+                        / (self.character_data[character]['correct']
+                           + self.character_data[character]['incorrect']))
             else:
                 if len(character) == 1:
                     self.combo = 0
                     self.character_data[character]['incorrect'] += 1
                     self.answer_status = 'Wrong'
+                    self.character_data[character]['total time'] += char_time
         # This creates a user file and pickle dumps the contents into a file.
-        with open(r"C:\Users\MaxSteele\Documents\py_programs\keyboard-project\user-saves" + '\\' + self.user, 'wb') as f:
+        with open(r"C:\Users\MaxSteele\Documents\py_programs"
+                  r"\keyboard-project\user-saves" + '\\' + self.user,
+                  'wb') as f:
             pickle.dump(self.character_data, f)
 
     def build_a_string(self):
@@ -123,19 +133,27 @@ class CharacterRunner():
         print(f'Current users: {self.user_list}.')
         self.user = input('Enter your name!\n ')
         if self.user in self.user_list:
-            with open(r"C:\Users\MaxSteele\Documents\py_programs\keyboard-project\user-saves" + '\\' + self.user, 'rb') as f:
+            with open(r"C:\Users\MaxSteele\Documents\py_programs"
+                      r"\keyboard-project\user-saves" + '\\' + self.user,
+                      'rb') as f:
                 self.character_data = pickle.load(f)
         else:
             # initialized character data for a new user. All correct and
             # incorrect ticks are set to 0.
             self.user_list.append(self.user)
             # Update the Save file for the list of users
-            with open(r"C:\Users\MaxSteele\Documents\py_programs\keyboard-project\list-of-users\user-list", 'wb') as f:
+            with open(r"C:\Users\MaxSteele\Documents\py_programs"
+                      r"\keyboard-project\list-of-users\user-list", 'wb') as f:
                 pickle.dump(self.user_list, f)
             for item in self.all_var:
-                self.character_data[item] = {'correct': 0, 'incorrect': 0}
+                self.character_data[item] = {'correct': 0,
+                                             'incorrect': 0,
+                                             'total time': 0,
+                                             'average time': 0}
             # This dumps the user data into their file.
-            with open(r"C:\Users\MaxSteele\Documents\py_programs\keyboard-project\user-saves" + '\\' + self.user, 'wb') as f:
+            with open(r"C:\Users\MaxSteele\Documents\py_programs"
+                      r"\keyboard-project\user-saves" + '\\' + self.user,
+                      'wb') as f:
                 pickle.dump(self.character_data, f)
         print('What do you want to train?')
         print(('1.)Numbers\n2.)Letters\n3.)Symbols\n4.)Keypad\n5.)For words.\
