@@ -8,6 +8,8 @@ import pickle
 
 class CharacterRunner():
     def __init__(self):
+        # These character sets represent specific areas a user can train
+        # on the keyboard.
         self.numbers_var = ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
         self.keypad_var = ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                            '/', '*', '-', '+', '.')
@@ -46,8 +48,11 @@ class CharacterRunner():
 
     def run_game(self, game_choice):
         '''
-        This uses the predefined character sets to genereate the character the
+        This uses the predefined character sets to generate the character the
         user must type in correctly. Combo is updated if correct or incorrect.
+        game_choice is the character set that is entered, which decides what
+        type of letters, numbers, or symbols that the user must select when
+        they play.
         '''
         char_time = ''
         while self.user_selection != 'Q':
@@ -60,6 +65,8 @@ class CharacterRunner():
             print(f'Type: {character} ')
 
             if len(character) == 1:
+                # Character length of 1 means that it will save the time only
+                # if the exercise is testing for single characters.
                 start_time = time.perf_counter()
                 self.user_selection = msvcrt.getch().decode('utf-8')
                 end_time = time.perf_counter()
@@ -68,10 +75,14 @@ class CharacterRunner():
                 self.user_selection = input('Type the number: ')
                 end_time = time.perf_counter()
             char_time = end_time - start_time
+
             if self.user_selection == 'Q':
                 print('Game Ended')
             elif self.user_selection == character:
+                # Saves data if correct character is typed and length is 1.
                 if len(character) == 1:
+                    # character length of 1 makes sure the time is only saved
+                    # for single characters, not words or 'build-a-string'.
                     self.combo += 1
                     self.character_data[character]['correct'] += 1
                     self.answer_status = 'Correct!'
@@ -81,11 +92,17 @@ class CharacterRunner():
                         / (self.character_data[character]['correct']
                            + self.character_data[character]['incorrect']))
             else:
+                # Saves data if incorrect character is typed and length is 1.
                 if len(character) == 1:
                     self.combo = 0
                     self.character_data[character]['incorrect'] += 1
                     self.answer_status = 'Wrong'
                     self.character_data[character]['total time'] += char_time
+                    self.character_data[character]['average time'] = (
+                        self.character_data[character]['total time']
+                        / (self.character_data[character]['correct']
+                           + self.character_data[character]['incorrect']))
+
         # This creates a user file and pickle dumps the contents into a file.
         with open(r"C:\Users\MaxSteele\Documents\py_programs"
                   r"\keyboard-project\user-saves" + '\\' + self.user,
@@ -102,10 +119,13 @@ class CharacterRunner():
         progress = 0
         user_input = ''
         char_time = 0
+        # Creates a string of 10 random characters.
         for number in range(10):
             self.rando_string += (
                 self.all_var[random.randint(0, len(self.all_var) - 1)])
+
         while progress != len(self.rando_string):
+            # Game quits once the user has correctly input the entire string.
             if progress < 0:
                 progress = 0
             os.system('cls')
@@ -118,6 +138,8 @@ class CharacterRunner():
             end_time = time.perf_counter()
             char_time = end_time - start_time
             if user_input == self.rando_string[:progress + 1]:
+                # This checks to see if what the user entered is equal to
+                # the string slice they have to enter.
                 progress += 1
             elif user_input == 'ENDGAME':
                 print('bye')
@@ -155,9 +177,11 @@ class CharacterRunner():
                       r"\keyboard-project\user-saves" + '\\' + self.user,
                       'wb') as f:
                 pickle.dump(self.character_data, f)
-        print('What do you want to train?')
-        print(('1.)Numbers\n2.)Letters\n3.)Symbols\n4.)Keypad\n5.)For words.\
-               \n6.)Build-a-String'))
+
+        os.system('cls')
+        print(f'Hello, {self.user}! What do you want to train?\n')
+        print("1.)Numbers\n2.)Letters\n3.)Symbols\n4.)Keypad\n5.)For words."
+              "\n6.)Build-a-String\n")
 
         game_type = input('Enter game choice ')
         if game_type == '1':
@@ -172,6 +196,16 @@ class CharacterRunner():
             self.run_game(self.word_list)
         elif game_type == '6':
             self.build_a_string()
+
+    def show_stats(self):
+        # might be able to have one method to show stats. input determines
+        # the type of stats that you get back.
+        for char in self.character_data:
+            print(
+                f'{char}: Correct:{self.character_data[char]["correct"]}.'
+                f'Incorrect: {self.character_data[char]["incorrect"]}.'
+                f' Average time: {self.character_data[char]["average time"]}'
+                 )
 
 
 def start_game():
