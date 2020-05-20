@@ -204,8 +204,22 @@ class CharacterRunner():
             print(
                 f'{char}: Correct:{self.character_data[char]["correct"]}.'
                 f'Incorrect: {self.character_data[char]["incorrect"]}.'
-                f' Average time: {self.character_data[char]["average time"]}'
+                f'Average time: {self.character_data[char]["average time"]}'
                  )
+
+    def slowest(self):
+        '''
+        This prints out the characters that have the slowest input times.
+        '''
+        slow_list = []
+        for key, value in self.character_data.items():
+            slow_list.append((value['average time'], key))
+        slow_list.sort(reverse=True)
+        slow_list = slow_list[0:5]
+        count = 1
+        for item in slow_list:
+            print(f'{count} | Character: {item[1]}. Average Speed: {item[0]}.')
+            count += 1
 
 
 def start_game():
