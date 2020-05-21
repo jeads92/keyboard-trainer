@@ -55,8 +55,10 @@ class CharacterRunner():
         they play.
         '''
         char_time = ''
+        self.user_selection = ''
         while self.user_selection != 'Q':
             os.system('cls')
+            print('Enter "Q" to go to mainscreen.')
             character = game_choice[random.randint(0, len(game_choice) - 1)]
             print(f'Current Streak: {self.combo}!\n')
             if type(char_time) != str:
@@ -77,7 +79,8 @@ class CharacterRunner():
             char_time = end_time - start_time
 
             if self.user_selection == 'Q':
-                print('Game Ended')
+                print('bye!')
+                pass
             elif self.user_selection == character:
                 # Saves data if correct character is typed and length is 1.
                 if len(character) == 1:
@@ -119,6 +122,7 @@ class CharacterRunner():
         progress = 0
         user_input = ''
         char_time = 0
+        self.rando_string = ''
         # Creates a string of 10 random characters.
         for number in range(10):
             self.rando_string += (
@@ -129,8 +133,9 @@ class CharacterRunner():
             if progress < 0:
                 progress = 0
             os.system('cls')
+            print('Type "ENDGAME" to go to mainscreen.')
             print(f'Input time: {char_time:0.4f}.')
-            print(f'The b.a.s. is {self.rando_string}.')
+            print(f'The b.a.s. is: {self.rando_string} ')
             print(f'Current string: {self.rando_string[:progress + 1]}' +
                   '\n')
             start_time = time.perf_counter()
@@ -181,8 +186,9 @@ class CharacterRunner():
         os.system('cls')
         print(f'Hello, {self.user}! What do you want to train?\n')
         print("1.)Numbers\n2.)Letters\n3.)Symbols\n4.)Keypad\n5.)For words."
-              "\n6.)Build-a-String\n")
-
+              "\n6.)Build-a-String\ns.) To view stats.")
+        print('Press "Q" to quit.')
+        game_type = ''
         game_type = input('Enter game choice ')
         if game_type == '1':
             self.run_game(self.numbers_var)
@@ -196,6 +202,10 @@ class CharacterRunner():
             self.run_game(self.word_list)
         elif game_type == '6':
             self.build_a_string()
+        elif game_type == 's':
+            self.show_stats()
+        elif game_type == 'Q':
+            print('End')
 
     def show_stats(self):
         # might be able to have one method to show stats. input determines
@@ -204,7 +214,8 @@ class CharacterRunner():
             print(
                 f'{char}: Correct:{self.character_data[char]["correct"]}.'
                 f'Incorrect: {self.character_data[char]["incorrect"]}.'
-                f' Average time: {self.character_data[char]["average time"]}'
+                f' Average time: '
+                f'{self.character_data[char]["average time"]:0.2f}'
                  )
 
     def slowest(self):
