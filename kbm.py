@@ -34,7 +34,7 @@ class CharacterRunner():
         self.rando_string = ''
         self.user = ''
         self.character_data = {}
-        # Attempts to load a save data of users. if one does not exist, an
+        # Attempts to load the list of users. if one does not exist, an
         # empty one is created
         try:
             f = open(r"C:\Users\MaxSteele\Documents\py_programs"
@@ -45,6 +45,17 @@ class CharacterRunner():
             f = open(r"C:\Users\MaxSteele\Documents\py_programs"
                      r"\keyboard-project\list-of-users\user-list", 'w+')
             f.close()
+
+    def save_data(self, user_name):
+        '''
+        save_data takes the updated variable, "self.character_data", and saves
+        it do a file. user_name will be the path that the data is saved to
+        in the save folder.
+        '''
+        file_path = (r'C:\Users\MaxSteele\Documents\py_programs'
+                     r'\keyboard-project\user-saves')
+        with open(file_path + '\\' + user_name, 'wb') as f:
+            pickle.dump(self.character_data, f)
 
     def run_game(self, game_choice):
         '''
@@ -106,11 +117,9 @@ class CharacterRunner():
                         / (self.character_data[character]['correct']
                            + self.character_data[character]['incorrect']))
 
-        # This creates a user file and pickle dumps the contents into a file.
-        with open(r"C:\Users\MaxSteele\Documents\py_programs"
-                  r"\keyboard-project\user-saves" + '\\' + self.user,
-                  'wb') as f:
-            pickle.dump(self.character_data, f)
+        # This creates a user file (if one does not exist) and pickle dumps
+        # the contents into a file. This saves the accuracy for the player.
+        self.save_data(self.user)
 
     def build_a_string(self):
         '''
@@ -172,22 +181,21 @@ class CharacterRunner():
             with open(r"C:\Users\MaxSteele\Documents\py_programs"
                       r"\keyboard-project\list-of-users\user-list", 'wb') as f:
                 pickle.dump(self.user_list, f)
+
             for item in self.all_var:
                 self.character_data[item] = {'correct': 0,
                                              'incorrect': 0,
                                              'total time': 0,
                                              'average time': 0}
             # This dumps the user data into their file.
-            with open(r"C:\Users\MaxSteele\Documents\py_programs"
-                      r"\keyboard-project\user-saves" + '\\' + self.user,
-                      'wb') as f:
-                pickle.dump(self.character_data, f)
+            self.save_data(self.user)
 
         os.system('cls')
         print(f'Hello, {self.user}! What do you want to train?\n')
         print("1.)Numbers\n2.)Letters\n3.)Symbols\n4.)Keypad\n5.)For words."
               "\n6.)Build-a-String\ns.) To view stats.")
         print('Press "Q" to quit.')
+
         game_type = ''
         game_type = input('Enter game choice ')
         if game_type == '1':
