@@ -204,7 +204,7 @@ class CharacterRunner():
             print(
                 f'{char}: Correct:{self.character_data[char]["correct"]}.'
                 f'Incorrect: {self.character_data[char]["incorrect"]}.'
-                f'Average time: {self.character_data[char]["average time"]}'
+                f' Average time: {self.character_data[char]["average time"]}'
                  )
 
     def slowest(self):
@@ -218,8 +218,33 @@ class CharacterRunner():
         slow_list = slow_list[0:5]
         count = 1
         for item in slow_list:
-            print(f'{count} | Character: {item[1]}. Average Speed: {item[0]}.')
+            print(f'{count} | Character: {item[1]}. '
+                  f'Average Speed: {item[0]:0.2f}.')
             count += 1
+
+    def weakest(self):
+        '''
+        This prints out the top 5 characters with the highest error times.
+        '''
+        weak_list = []
+        for key, value in self.character_data.items():
+            try:
+                # This creates a tuple with the order of:
+                # (incorrect, letter, ratio, correct).
+                weak_list.append((value['incorrect'],
+                                  key,
+                                  value['correct'] / value['incorrect'],
+                                  value['correct']))
+            except ZeroDivisionError:
+                weak_list.append((value['incorrect'],
+                                  key,
+                                  value['correct'],
+                                  value['correct']))
+        weak_list.sort(reverse=True)
+        weak_list = weak_list[0:5]
+        for data in weak_list:
+            print(f'Character: {data[1]}. Incorrect: {data[0]}. '
+                  f'Ratio: {data[2]:0.2f}. Correct: {data[3]}.')
 
 
 def start_game():
