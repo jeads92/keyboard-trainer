@@ -129,54 +129,32 @@ class CharacterRunner():
         self.combo = 0
         char_time = ''
         self.user_selection = ''
-        user_response = ''
+        
         while self.user_selection != '!':
-            print(self.answer_status)
+            os.system('cls')
             word = self.word_list[random.randint(0, len(self.word_list) - 1)]
-            word = word.lower()
-            for index, letter in enumerate(word):
-                os.system('cls')
-                print('Enter "!" to go to mainscreen.')
-                print(f'Current Streak: {self.combo}!\n')
-                if type(char_time) != str:
-                    print(f'Input time: {char_time:0.4f}')
-                print(f'Type this word: {word}.')
+            print('Enter "!" to go to mainscreen.')
+            print(f'Current Streak: {self.combo}!\n')
+            print(self.answer_status)
+            if type(char_time) != str:
+                print(f'Input time: {char_time:0.4f}')
+            print(f'Type this word: {word}.')
+            
+            start_time = time.perf_counter()
+            self.user_selection = input('Enter the word: ')
+            end_time = time.perf_counter()
+            char_time = end_time - start_time
+        
+            if self.user_selection == '!':
+                print('bye')
+                break
                 
-                print(f'Type: {letter}')
-                
-                start_time = time.perf_counter()
-                self.user_selection = msvcrt.getch().decode('utf-8')
-                end_time = time.perf_counter()
-                char_time = end_time - start_time
-                user_response += self.user_selection
-                
-                if self.user_selection == letter:
-                    self.character_data[letter]['correct'] += 1
-                    # self.answer_status = 'Correct!'  needs to be moved 
-                    self.character_data[letter]['total time'] += char_time
-                    self.character_data[letter]['average time'] = (
-                        self.character_data[letter]['total time']
-                        / (self.character_data[letter]['correct']
-                           + self.character_data[letter]['incorrect']))
-                    self.save_data(self.user)
-
-                elif self.user_selection == '!':
-                    print('bye')
-                    break
-
-                else:
-                    self.character_data[letter]['incorrect'] += 1
-                    # self.answer_status = 'Correct!'  needs to be moved 
-                    self.character_data[letter]['total time'] += char_time
-                    self.character_data[letter]['average time'] = (
-                        self.character_data[letter]['total time']
-                        / (self.character_data[letter]['correct']
-                           + self.character_data[letter]['incorrect']))
-                    self.save_data(self.user)
-            if user_response == word:
+            if self.user_selection == word:
                 self.answer_status = 'Correct'
+                self.combo += 1
             else:
                 self.answer_status = 'Incorrect'
+                self.combo = 0
             
 
     def build_a_string(self):
