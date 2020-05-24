@@ -57,6 +57,22 @@ class CharacterRunner():
         with open(file_path + '\\' + user_name, 'wb') as f:
             pickle.dump(self.character_data, f)
 
+    def update_stats(self, character, char_time, status):
+        if status == 'correct':
+            self.combo += 1
+            self.character_data[character]['correct'] += 1
+            self.answer_status = 'Correct!'
+        else:
+            self.combo = 0
+            self.character_data[character]['incorrect'] += 1
+            self.answer_status = 'incorrect!'
+
+        self.character_data[character]['total time'] += char_time
+        self.character_data[character]['average time'] = (
+            self.character_data[character]['total time']
+            / (self.character_data[character]['correct']
+               + self.character_data[character]['incorrect']))
+
     def run_game(self, game_choice):
         '''
         This uses the predefined character sets to generate the character the
@@ -66,7 +82,6 @@ class CharacterRunner():
         they play.
         '''
         char_time = ''
-        self.user_selection = ''
 
         while self.user_selection != 'Q':
             os.system('cls')
@@ -90,24 +105,10 @@ class CharacterRunner():
                 pass
 
             elif self.user_selection == character:
-                self.combo += 1
-                self.character_data[character]['correct'] += 1
-                self.answer_status = 'Correct!'
-                self.character_data[character]['total time'] += char_time
-                self.character_data[character]['average time'] = (
-                    self.character_data[character]['total time']
-                    / (self.character_data[character]['correct']
-                       + self.character_data[character]['incorrect']))
+                self.update_stats(character, char_time, 'correct')
 
             else:
-                self.combo = 0
-                self.character_data[character]['incorrect'] += 1
-                self.answer_status = 'Wrong'
-                self.character_data[character]['total time'] += char_time
-                self.character_data[character]['average time'] = (
-                    self.character_data[character]['total time']
-                    / (self.character_data[character]['correct']
-                       + self.character_data[character]['incorrect']))
+                self.update_stats(character, char_time, 'incorrect')
 
         # This creates a user file (if one does not exist) and pickle dumps
         # the contents into a file. This saves the accuracy for the player.
