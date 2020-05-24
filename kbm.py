@@ -76,16 +76,16 @@ class CharacterRunner():
                 print(f'Input time: {char_time:0.4f}')
             print(self.answer_status)
             print(f'Type: {character} ')
-
+            
+            # This section gets the input time If len of character is only 1,
+            # then msvcrt is used so that return does not need to be entered.
             if len(character) == 1:
-                # Character length of 1 means that it will save the time only
-                # if the exercise is testing for single characters.
                 start_time = time.perf_counter()
                 self.user_selection = msvcrt.getch().decode('utf-8')
                 end_time = time.perf_counter()
             else:
                 start_time = time.perf_counter()
-                self.user_selection = input('Type the number: ')
+                self.user_selection = input('Type the word: ')
                 end_time = time.perf_counter()
             char_time = end_time - start_time
 
@@ -105,6 +105,7 @@ class CharacterRunner():
                         self.character_data[character]['total time']
                         / (self.character_data[character]['correct']
                            + self.character_data[character]['incorrect']))
+       
             else:
                 # Saves data if incorrect character is typed and length is 1.
                 if len(character) == 1:
@@ -120,6 +121,63 @@ class CharacterRunner():
         # This creates a user file (if one does not exist) and pickle dumps
         # the contents into a file. This saves the accuracy for the player.
         self.save_data(self.user)
+        
+    def word_runner(self):
+        '''
+        Generates a word that the user needs to input correctly.
+        '''
+        self.combo = 0
+        char_time = ''
+        self.user_selection = ''
+        user_response = ''
+        while self.user_selection != '!':
+            print(self.answer_status)
+            word = self.word_list[random.randint(0, len(self.word_list) - 1)]
+            word = word.lower()
+            for index, letter in enumerate(word):
+                os.system('cls')
+                print('Enter "!" to go to mainscreen.')
+                print(f'Current Streak: {self.combo}!\n')
+                if type(char_time) != str:
+                    print(f'Input time: {char_time:0.4f}')
+                print(f'Type this word: {word}.')
+                
+                print(f'Type: {letter}')
+                
+                start_time = time.perf_counter()
+                self.user_selection = msvcrt.getch().decode('utf-8')
+                end_time = time.perf_counter()
+                char_time = end_time - start_time
+                user_response += self.user_selection
+                
+                if self.user_selection == letter:
+                    self.character_data[letter]['correct'] += 1
+                    # self.answer_status = 'Correct!'  needs to be moved 
+                    self.character_data[letter]['total time'] += char_time
+                    self.character_data[letter]['average time'] = (
+                        self.character_data[letter]['total time']
+                        / (self.character_data[letter]['correct']
+                           + self.character_data[letter]['incorrect']))
+                    self.save_data(self.user)
+
+                elif self.user_selection == '!':
+                    print('bye')
+                    break
+
+                else:
+                    self.character_data[letter]['incorrect'] += 1
+                    # self.answer_status = 'Correct!'  needs to be moved 
+                    self.character_data[letter]['total time'] += char_time
+                    self.character_data[letter]['average time'] = (
+                        self.character_data[letter]['total time']
+                        / (self.character_data[letter]['correct']
+                           + self.character_data[letter]['incorrect']))
+                    self.save_data(self.user)
+            if user_response == word:
+                self.answer_status = 'Correct'
+            else:
+                self.answer_status = 'Incorrect'
+            
 
     def build_a_string(self):
         '''
@@ -207,7 +265,7 @@ class CharacterRunner():
         elif game_type == '4':
             self.run_game(self.keypad_var)
         elif game_type == '5':
-            self.run_game(self.word_list)
+            self.word_runner()
         elif game_type == '6':
             self.build_a_string()
         elif game_type == 's':
