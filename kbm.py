@@ -84,14 +84,31 @@ class CharacterRunner():
         char_time = ''
 
         while self.user_selection != 'Q':
+            # Below will fill the list. Numbers with a weaker letters will be
+            # more common so the user can get some practice.
+            play_set = []
+            for characters in game_choice:
+                try:
+                    weight = (self.character_data[characters]['correct']
+                              / self.character_data[characters]['incorrect'])
+                    weight = round(weight) + 1
+                except ZeroDivisionError:
+                    weight = 1
+                for number in range(weight):
+                    play_set.append(characters)
+            character = play_set[random.randint(0, len(play_set) - 1)]
+
             os.system('cls')
             print('Enter "Q" to go to mainscreen.')
-            character = game_choice[random.randint(0, len(game_choice) - 1)]
             print(f'Current Streak: {self.combo}!\n')
             if type(char_time) != str:
                 print(f'Input time: {char_time:0.4f}')
             print(self.answer_status)
             print(f'Type: {character} ')
+            # below is a test to view the variables.
+            print('\n\n')
+            print(play_set)
+            print(self.character_data)
 
             # This section gets the input time If len of character is only 1,
             # then msvcrt is used so that return does not need to be entered.
