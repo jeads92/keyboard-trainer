@@ -105,13 +105,9 @@ class CharacterRunner():
                 print(f'Input time: {char_time:0.4f}')
             print(self.answer_status)
             print(f'Type: {character} ')
-            # below is a test to view the variables.
-            print('\n\n')
-            print(play_set)
-            print(self.character_data)
 
-            # This section gets the input time If len of character is only 1,
-            # then msvcrt is used so that return does not need to be entered.
+            # This section gets the input time so the user can track their
+            # speed.
             start_time = time.perf_counter()
             self.user_selection = msvcrt.getch().decode('utf-8')
             end_time = time.perf_counter()
@@ -234,30 +230,33 @@ class CharacterRunner():
             # This dumps the user data into their file.
             self.save_data(self.user)
 
-        os.system('cls')
-        print(f'Hello, {self.user}! What do you want to train?\n')
-        print("1.)Numbers\n2.)Letters\n3.)Symbols\n4.)Keypad\n5.)For words."
-              "\n6.)Build-a-String\ns.) To view stats.")
-        print('Press "Q" to quit.')
-
         game_type = ''
-        game_type = input('Enter game choice ')
-        if game_type == '1':
-            self.run_game(self.numbers_var)
-        elif game_type == '2':
-            self.run_game(self.letter_var)
-        elif game_type == '3':
-            self.run_game(self.symbol_var)
-        elif game_type == '4':
-            self.run_game(self.keypad_var)
-        elif game_type == '5':
-            self.word_runner()
-        elif game_type == '6':
-            self.build_a_string()
-        elif game_type == 's':
-            self.show_stats()
-        elif game_type == 'Q':
-            print('End')
+        while game_type != 'END':
+            print(f'Hello, {self.user}! What do you want to train?\n')
+            print("1.)Numbers\n2.)Letters\n3.)Symbols\n4.)Keypad\n5.)"
+                  "For words.\n6.)Build-a-String\ns.) To view stats.")
+            print('Press "END" to quit.')
+            game_type = input('Enter game choice ')
+            os.system('cls')
+
+            if game_type == '1':
+                self.run_game(self.numbers_var)
+            elif game_type == '2':
+                self.run_game(self.letter_var)
+            elif game_type == '3':
+                self.run_game(self.symbol_var)
+            elif game_type == '4':
+                self.run_game(self.keypad_var)
+            elif game_type == '5':
+                self.word_runner()
+            elif game_type == '6':
+                self.build_a_string()
+            elif game_type == 's':
+                self.show_stats()
+            elif game_type == 'END':
+                print('End Program')
+            else:
+                print('{game_type} is not a valid response. Try again.')
 
     def show_stats(self):
         # might be able to have one method to show stats. input determines
