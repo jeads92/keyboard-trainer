@@ -234,7 +234,9 @@ class CharacterRunner():
         while game_type != 'END':
             print(f'Hello, {self.user}! What do you want to train?\n')
             print("1.)Numbers\n2.)Letters\n3.)Symbols\n4.)Keypad\n5.)"
-                  "For words.\n6.)Build-a-String\ns.) To view stats.")
+                  "For words.\n6.)Build-a-String)\n's' To view stats.\n"
+                  "weakest to view characters with the most errors\n"
+                  "slowest to view the slowest characters\n")
             print('Press "END" to quit.')
             game_type = input('Enter game choice ')
             os.system('cls')
@@ -255,6 +257,10 @@ class CharacterRunner():
                 self.show_stats()
             elif game_type == 'END':
                 print('End Program')
+            elif game_type == 'weakest':
+                self.weakest()
+            elif game_type == 'slowest':
+                self.slowest()
             else:
                 print('{game_type} is not a valid response. Try again.')
 
