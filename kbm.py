@@ -196,6 +196,7 @@ class CharacterRunner():
                 # the string slice they have to enter.
                 progress += 1
             elif user_input == 'ENDGAME':
+                os.system('cls')
                 print('bye')
                 break
             else:
